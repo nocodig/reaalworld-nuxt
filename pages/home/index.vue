@@ -13,13 +13,36 @@
           <div class="feed-toggle">
             <ul class="nav nav-pills outline-active">
               <li v-if="user" class="nav-item">
-                <a class="nav-link disabled" href="">Your Feed</a>
+                <nuxt-link
+                  exact
+                  class="nav-link"
+                  :class="{ active: tab === 'your_feed' }"
+                  :to="{
+                    name: 'home',
+                    query: {
+                      tab: 'your_feed',
+                    },
+                  }"
+                  >Your Feed</nuxt-link
+                >
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="">Global Feed</a>
+                <nuxt-link
+                  exact
+                  :class="{ active: tab === 'global_feed' }"
+                  class="nav-link"
+                  :to="{ name: 'home', query: { tab: 'global_feed' } }"
+                  >Global Feed</nuxt-link
+                >
               </li>
               <li v-if="tag" class="nav-item">
-                <a class="nav-link active" href="">#{{tag}}</a>
+                <nuxt-link
+                  exact
+                  :class="{ active: tab === 'tag' }"
+                  class="nav-link"
+                  :to="{ name: 'home', query: { tab: 'tag' } }"
+                  >#{{ tag }}</nuxt-link
+                >
               </li>
             </ul>
           </div>
@@ -92,7 +115,8 @@
                     name: 'home',
                     query: {
                       page: item,
-                      tag: $route.query.tag
+                      tag: $route.query.tag,
+                      tab: tab
                     },
                   }"
                   >{{ item }}</nuxt-link
@@ -114,8 +138,9 @@
                   name: 'home',
                   query: {
                     page: 1,
-                    tag: item
-                  }
+                    tag: item,
+                    tab: 'tag',
+                  },
                 }"
                 href=""
                 class="tag-pill tag-default"
@@ -130,22 +155,23 @@
 </template>
 
 <script>
-import { getArticles } from "@/api/article";
+import { getArticles, getFeedArticles } from "@/api/article";
 import { getTags } from "@/api/tag";
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   name: "HomeIndex",
-  async asyncData({ query }) {
+  async asyncData({ query, store }) {
     const page = parseInt(query.page || 1);
     const limit = 20;
-    const { tag } = query;
+    const { tag, tab } = query;
+    const loadArticles = store.state.user && tab === 'your_feed' ? getFeedArticles : getArticles
 
     const [articleRes, tagRes] = await Promise.all([
-      getArticles({
+      loadArticles({
         limit,
         offset: (page - 1) * limit,
-        tag: query.tag
+        tag: query.tag,
       }),
       getTags(),
     ]);
@@ -158,12 +184,13 @@ export default {
       page,
       limit,
       tags,
-      tag
+      tag,
+      tab: tab || "global_feed",
     };
   },
-  watchQuery: ["page", 'tag'],
+  watchQuery: ["page", "tag", "tab"],
   computed: {
-    ...mapState(['user']),
+    ...mapState(["user"]),
     totalPage() {
       return Math.ceil(this.articlesCount / this.limit);
     },
