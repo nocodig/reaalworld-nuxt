@@ -57,5 +57,10 @@ module.exports = {
     '~/plugins/request.js',
     '~/plugins/dayjs.js'
   ],
-  devtool: '#source-map'
+  devtool: '#source-map',
+
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+  }
 }
