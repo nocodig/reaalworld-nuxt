@@ -54,7 +54,7 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd /root/real-world
-          wget https://github.com/nocodig/reaalworld-nuxt/releases/latest/download/release.tgz -O release.tgz
+          wget https://github3.mk-proxy.ml/-----https://github.com/nocodig/reaalworld-nuxt/releases/latest/download/release.tgz -O release.tgz
           tar zxvf release.tgz
           npm install --production
           pm2 reload pm2.config.json
