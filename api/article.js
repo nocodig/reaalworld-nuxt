@@ -1,4 +1,4 @@
-import request from "@/utils/request";
+import { request } from "@/plugins/request";
 
 // 文章公共列表
 export const getArticles = (params) => {
@@ -14,8 +14,35 @@ export const getFeedArticles = (params) => {
     method: "GET",
     url: "/api/articles/feed",
     params,
-    headers: {
-      Authorization: `Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTQ2MDkyLCJ1c2VybmFtZSI6InhpYW9mYW5nIiwiZXhwIjoxNjIwMDU0MTQ3fQ.H9mwpng4D5_bTDDAUCeGh4XRUIy9NFcllahBd-nD0co`,
-    },
   });
 };
+
+
+export const addFavorite = (slug) => {
+  return request({
+    method: "POST",
+    url: `/api/articles/${slug}/favorite`,
+  });
+};
+
+export const removeFavorite = (slug) => {
+  return request({
+    method: "DELETE",
+    url: `/api/articles/${slug}/favorite`,
+  });
+};
+
+export const getArticle = (slug) => {
+  return request({
+    method: "GET",
+    url: `/api/articles/${slug}`,
+  });
+};
+
+export const getComments = (slug) => {
+  return request({
+    method: "GET",
+    url: `/api/articles/${slug}/comments`,
+  });
+};
+
