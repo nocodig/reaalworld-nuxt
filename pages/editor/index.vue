@@ -4,37 +4,72 @@
     <div class="row">
 
       <div class="col-md-10 offset-md-1 col-xs-12">
-        <form>
+        <form @submit.prevent="onsubmit()">
           <fieldset>
             <fieldset class="form-group">
-                <input type="text" class="form-control form-control-lg" placeholder="Article Title">
+                <input :disabled="submitting" v-model="article.title" type="text" class="form-control form-control-lg" placeholder="Article Title">
             </fieldset>
             <fieldset class="form-group">
-                <input type="text" class="form-control" placeholder="What's this article about?">
+                <input :disabled="submitting" v-model="article.description" type="text" class="form-control" placeholder="What's this article about?">
             </fieldset>
             <fieldset class="form-group">
-                <textarea class="form-control" rows="8" placeholder="Write your article (in markdown)"></textarea>
+                <textarea :disabled="submitting" v-model="article.body" class="form-control" rows="8" placeholder="Write your article (in markdown)"></textarea>
             </fieldset>
             <fieldset class="form-group">
-                <input type="text" class="form-control" placeholder="Enter tags"><div class="tag-list"></div>
+                <input :disabled="submitting" v-model="article.tagList" type="text" class="form-control" placeholder="Enter tags"><div class="tag-list"></div>
             </fieldset>
-            <button class="btn btn-lg pull-xs-right btn-primary" type="button">
+            <button :disabled="submitting" class="btn btn-lg pull-xs-right btn-primary" type="submit">
                 Publish Article
             </button>
           </fieldset>
         </form>
       </div>
-
     </div>
   </div>
 </div>
 </template>
 
 <script>
+import { createArticle } from '@/api/article'
+
 export default {
   name: 'EditorIndex',
   // 路由匹配组件渲染之前会先执行中间件处理
-  middleware: 'authenticated'
+  middleware: 'authenticated',
+
+  data() {
+    return {
+      article: {
+        title: '',
+        description: '',
+        body: '',
+        tagList: ''
+      },
+      submitting: false
+    }
+  },
+
+  methods: {
+    async onsubmit() {
+      this.submitting = true
+      
+      const { data: {article} } = await createArticle({
+        article: {
+          ...this.article,
+          tagList: this.article.tagList.split(',')
+        }
+      })
+
+      
+
+      this.$router.push({
+        name: 'article',
+        params: {
+          slug: article.slug
+        }
+      })
+    }
+  }
 }
 </script>
 

@@ -17,3 +17,11 @@ export const register = (data) => {
     data,
   })
 }
+
+export const updateUserInfo = (data) => {
+  return request({
+    method: 'PUT',
+    url: '/api/user',
+    data
+  })
+}
