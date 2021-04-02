@@ -4,7 +4,7 @@
       <div class="container">
         <div class="row">
           <div class="col-xs-12 col-md-10 offset-md-1">
-            <img src="http://i.imgur.com/Qr71crq.jpg" class="user-img" />
+            <img src="https://static.productionready.io/images/smiley-cyrus.jpg" class="user-img" />
             <h4>Eric Simons</h4>
             <p>
               Cofounder @GoThinkster, lived in Aol's HQ for a few months, kinda
@@ -84,7 +84,8 @@
 <script>
 export default {
   name: 'UserProfileIndex',
-  middleware: 'authenticated'
+  middleware: 'authenticated',
+  data
 };
 </script>
 
