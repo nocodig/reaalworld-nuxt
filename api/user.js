@@ -25,3 +25,24 @@ export const updateUserInfo = (data) => {
     data
   })
 }
+
+export const getProfilesInfo = (data) => {
+  return request({
+    method: 'GET',
+    url: `/api/profiles/${data}`
+  })
+}
+
+export const followUser = (data) => {
+  return request({
+    method: 'POST',
+    url: `/api/profiles/${data}/follow`
+  })
+}
+
+export const unFollowUser = (data) => {
+  return request({
+    method: 'DELETE',
+    url: `/api/profiles/${data}/follow`
+  })
+}
